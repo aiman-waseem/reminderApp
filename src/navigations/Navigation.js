@@ -8,6 +8,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React, { useState } from 'react';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import 'react-native-gesture-handler';
+import { createStackNavigator } from '@react-navigation/stack';
+import LocationAlert from '../components/LocationAlert';
+import { AppProvider } from '../components/AppContext';
+
 
 // const Stack = createNativeStackNavigator();
 
@@ -28,6 +33,8 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
 
 // function Navigation() {
 //   return (
@@ -71,28 +78,38 @@ const Tab = createBottomTabNavigator();
 //   );
 // }
 // export default Navigation;
+// function StackNavigator() {
+//   return (
+//     <Stack.Navigator>
+//       <Stack.Screen name="Home" component={MainScreen} />
+//       <Stack.Screen name="MedicineForm" component={MedicineForm} />
+//     </Stack.Navigator>
+//   );
+// }
 
-function Navigation() {
+ export function Navigation() {
   const [scheduledAlarms, setScheduledAlarms] = useState([]);
 
   return (
-    <NavigationContainer>
+    
       <Tab.Navigator
         screenOptions={{
           tabBarInactiveTintColor: 'black',
           tabBarShowLabel: true,
         }}
       >
-           <Tab.Screen name="Home" component={MainScreen}
+           <Tab.Screen name="Home" component={StackNavigation}
        options={{
         tabBarLabel: 'Home',
+        headerShown: false,
+  
         tabBarIcon: ({ color, size }) => (
         <Entypo name="home" size={24} color="purple" />
         ),
       }}
       />
 
-        <Tab.Screen
+        {/* <Tab.Screen
           name="MedicinalReminder"
           options={{
             tabBarLabel: 'Medicinal Reminder',
@@ -100,7 +117,7 @@ function Navigation() {
           }}
         >
           {() => <MedicineForm scheduledAlarms={scheduledAlarms} setScheduledAlarms={setScheduledAlarms} />}
-        </Tab.Screen>
+        </Tab.Screen> */}
         
         <Tab.Screen
           name="SavedAlarm"
@@ -109,13 +126,73 @@ function Navigation() {
             tabBarIcon: ({ color, size }) => <Ionicons name="alarm-outline" size={24} color="#2E8B57" />,
           }}
         >
-          {() => <SavedAlarm savedAlarms={scheduledAlarms} />}
+          {() => <SavedAlarm savedAlarms={scheduledAlarms} onDelete={(id) => handleDeleteAlarm(id)} />}
         </Tab.Screen>
+
+        {/* <Tab.Screen name="locationAlert" component={LocationAlert}
+       options={{
+        tabBarLabel: 'locationAlert',
+        tabBarIcon: ({ color, size }) => (
+        <Entypo name="home" size={24} color="purple" />
+        ),
+      }}
+      /> */}
+
+        
       </Tab.Navigator>
-    </NavigationContainer>
+    
   );
 }
 
-export default Navigation;
+// export default Navigation;
+
+export function StackNavigation() {
+  const [scheduledAlarms, setScheduledAlarms] = useState([]);
+
+  return (
+    <Stack.Navigator
+    // screenOptions={{
+    //   headerShown: false, // Set headerShown to false to hide the header
+    // }}
+    >
+      <Stack.Screen name="HomeScreen" component={MainScreen} />
+      <Stack.Screen
+        name="FindMe"
+        component={Apps}
+      />
+      
+      
+      {/* <Stack.Screen
+        name="Medicine"
+        component={MedicineForm}
+      /> */}
+      <Stack.Screen
+        name="Medicine"
+        options={{
+          title: 'Medicinal Reminder',
+        }}
+      >
+        {() => <MedicineForm scheduledAlarms={scheduledAlarms} setScheduledAlarms={setScheduledAlarms} />}
+      </Stack.Screen>
+
+     
+
+     <Stack.Screen
+        name="SavedAlarms"
+        options={{
+          title: 'Saved Alarms',
+        }}
+      >
+        {() => <SavedAlarm savedAlarms={scheduledAlarms} />}
+      </Stack.Screen>
+
+      <Stack.Screen name="LocationAlert" component={LocationAlert} />
+   
+      
+
+    </Stack.Navigator>
+  );
+}
+
 
 

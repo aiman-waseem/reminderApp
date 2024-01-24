@@ -1,0 +1,22 @@
+appid:  d604ce6e-1514-4f23-aa44-9540d55010ab
+   
+ no fields present:
+ {
+  "longitude":"",
+  "latitude":""
+}
+
+same fields:
+{
+  "longitude":"65.4",
+  "latitude":"66"
+}
+
+
+   with in 10m
+
+{
+  "longitude":"-74.006",
+  "latitude":"40.7128"
+}
+
