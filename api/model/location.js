@@ -12,7 +12,8 @@ const locationSchema = new mongoose.Schema({
   latitude: {
     type: String,
     required: true,
-  },deviceToken:{ String},
+  },myId:{ 
+    type:Number}
  
 });
 

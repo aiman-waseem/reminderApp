@@ -11,16 +11,41 @@ export default function Apps() {
   LogBox.ignoreLogs(['Remote debugger']);
 
   return (
-    // <View style={{backgroundColor:'white', flex:'1'}}>
+  
     <View style={styles.container}>
-{/*      
-      <ImageBackground source={backgroundImge} resizeMode="cover"   
-      style={styles.bkg}> */}
-          <Texting />
+  
+     
+          
+
+       
+       <LinearGradient
+        colors={['#a3caeb', '#cfa3eb']}
+        start={{ x: 0.5, y: 0 }}
+        end={{ x: 1, y: 0.5 }}
+         style={styles.background}
+       >
+        <View  style={{
+          // elevation: 10,
+          backgroundColor: 'white',
+          borderRadius: 15,
+          height: 380,
+          width:300,
+         
+          // margin: 10,
+          // marginTop: 50,
+          // marginHorizontal:30,
+          paddingVertical: 20,
+          marginBottom:50,
+          // paddingHorizontal: 15,
+        }}>
+         {/* <Texting /> */}
           <CurrentCoordinates />
           <CurrentAdress />
-      {/* </ImageBackground> */}
-       <StatusBar style="auto" /> 
+          <StatusBar style="auto" /> 
+
+          </View>
+
+       </LinearGradient>
      
     </View>
       //  </View>
@@ -30,20 +55,29 @@ export default function Apps() {
 const styles = StyleSheet.create({
   container: {
     backgroundColor:'white',
-    height:300,
-    flex: 1,
+    // alignItems: 'center',
+    // justifyContent: 'center',
+   
+ 
   },
   text:{
     color: 'white',
     fontSize: 20,
-    padding: '5%'
+    // padding: '5%'
   },
-  bkg: {
-    flex: 1,
-    textAlign: 'center',
-    padding: '3%'
-  },
+  
+  // background: {
+  //   position: 'absolute',
+  //   left: 0,
+  //   right: 0,
+  //   top: 0,
+  //   height: 700,
+    
+  // },
   background: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     position: 'absolute',
     left: 0,
     right: 0,

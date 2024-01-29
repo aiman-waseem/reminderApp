@@ -1,94 +1,41 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, Image} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Apps from './Apps';
 import MedicineForm from './MedicineForm';
 import { useNavigation } from '@react-navigation/native';
-// import LocationAlert from './LocationAlert';
+import alarmClock from '../../assets/alarmclock2.png';
 
-
-// const MainScreen = () => {
-//   const [showApps, setShowApps] = useState(false);
-//   const [showmedApps, setShowmedApps] = useState(false);
-//   // const [Location, setLocationAlert] = useState(false);
-  
-
-//   const handleButtonPress = () => {
-//     setShowApps(true);
-//     console.log("Button pressed! Showing Apps component.");
-//   };
-  
-//   const handlemedButtonPress = () => {
-//     setShowmedApps(true);
-//     console.log("Button pressed! Showing MedicineForm component.");
-//   };
-//   // const handleLocationButton = () => {
-//   //   setLocationAlert(true);
-//   //   console.log("Button pressed! Showing location Alert component.");
-//   // };
-
-//   return (
-//     <View style={styles.container}>
-//       {/* <LinearGradient
-//       colors={['#a3caeb', '#cfa3eb']}
-//       start={{ x: 0.5, y: 0 }}
-//       end={{ x: 1, y: 0.5 }}
-//       style={styles.background}
-//       > */}
-//       <Text style={styles.header}>Notify</Text>
-//       <View style={styles.buttonContainer}>
-//         {!showApps ? (
-//           <TouchableOpacity
-//             style={styles.button}
-//             onPress={handleButtonPress}
-//           >
-//             <Text style={styles.buttonText}>My current Location</Text>
-//           </TouchableOpacity>
-//         ) : (
-//           <Apps />
-//         )}
-//       </View>
-//       <View style={styles.buttonContainer}>
-//         {!showmedApps ? (
-//           <TouchableOpacity
-//             style={styles.button}
-//             onPress={handlemedButtonPress}
-//           >
-//             <Text style={styles.buttonText}>Medicinal alert</Text>
-//           </TouchableOpacity>
-//         ) : (
-//           <MedicineForm />
-//         )}
-//       </View>
-// {/* 
-//       <View style={styles.buttonContainer}>
-// //         {!Location ? (
-// //           <TouchableOpacity
-// //             style={styles.button}
-// //             onPress={handleLocationButton}
-// //           >
-//             <Text style={styles.buttonText}>Location alert</Text>
-//           </TouchableOpacity>
-//        ) : (
-//          <LocationAlert />
-//        )}
-//      </View> */}
-//       {/* </LinearGradient> */}
-//     </View>
-//   );
-// };
 
 const MainScreen = () => {
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
+  
        <LinearGradient
         colors={['#a3caeb', '#cfa3eb']}
         start={{ x: 0.5, y: 0 }}
         end={{ x: 1, y: 0.5 }}
          style={styles.background}
        >
+      {/* <View>
+      
+      <Text style={styles.header}>
+      <Image
+            source={alarmClock}
+            style={styles.headerImage}
+          />
+        NOTIFY</Text>
+      </View> */}
+
+<View style={styles.headerContainer}>
+          <Image
+            source={alarmClock}
+            style={styles.headerImage}
+          />
+          <Text style={styles.headerText}>NOTIFY</Text>
+        </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.button}
@@ -142,10 +89,24 @@ const styles = StyleSheet.create({
     height: 700,
     
   },
-  header: {
-    fontSize: 24,
+  
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+
+      position: 'relative',
+    bottom:150, 
+  },
+  headerImage: {
+    width: 59,
+    height: 59,
+    marginRight: 20, 
+  },
+  headerText: {
+     // fontFamily: 'Lobster',
+    fontSize: 40,
     fontWeight: 'bold',
-    marginBottom: 20,
+    
     color: 'black',
   },
   buttonContainer: {
@@ -154,11 +115,13 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: 'white',
     padding: 15,
-    borderRadius: 20, // Optional: Add borderRadius for rounded corners
+    borderRadius: 20, 
   },
   buttonText: {
     color: 'black',
     textAlign: 'center',
+    fontSize:16,
+    fontWeight:'bold',
   },
 });
 

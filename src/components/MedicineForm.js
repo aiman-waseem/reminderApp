@@ -162,15 +162,16 @@
 
 
 
-import React, { useState, useEffect } from 'react';
-import { View, TextInput, Button, Alert, StyleSheet, Text, FlatList , Dimensions} from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, TextInput, Button, Alert, StyleSheet, Text} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Notifications from 'expo-notifications';
+import { Picker } from '@react-native-picker/picker';
 import { useAppContext } from './AppContext';
+import axios from 'axios';
 
-import SavedAlarm from './SavedAlarm';
 
 export default function MedicineForm({ scheduledAlarms, setScheduledAlarms }) {
   const [medicineName, setMedicineName] = useState('');
@@ -178,16 +179,12 @@ export default function MedicineForm({ scheduledAlarms, setScheduledAlarms }) {
   const [purpose, setPurpose] = useState('');
   const [isDateTimePickerVisible, setDateTimePickerVisible] = useState(false);
   const [notificationTime, setNotificationTime] = useState(null);
-  const [useOCR, setUseOCR] = useState(false);
-  const [capturedImage, setCapturedImage] = useState(null);
+  
+  const [myid,Setmyid]=useState(0)
 
   const { setMedicinalForm } = useAppContext();
 
-  // const [scheduledAlarms, setScheduledAlarms] = useState([]);
 
-  useEffect(() => {
-    requestCameraPermission();
-  }, []);
 
   const requestCameraPermission = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -197,11 +194,12 @@ export default function MedicineForm({ scheduledAlarms, setScheduledAlarms }) {
   };
 
   const handleSaveDetails = () => {
-    if (!medicineName || !dosage || !purpose || !notificationTime) {
-      Alert.alert('Error', 'Please enter all details.');
+    if (!medicineName ||!notificationTime) {
+      Alert.alert('Error', 'Please enter all required details.');
       return;
     }
-
+    //  myid+=1;
+    Setmyid((prevId) => prevId + 1);
     // Save the alarm details to the scheduledAlarms state
     const newAlarm = {
       id: new Date().getTime(), // Use a unique ID (timestamp) as the key
@@ -209,23 +207,41 @@ export default function MedicineForm({ scheduledAlarms, setScheduledAlarms }) {
       dosage,
       purpose,
       notificationTime,
+      myid
     };
 
      
     setScheduledAlarms((prevAlarms) => [...prevAlarms, newAlarm]);
     setMedicinalForm((prevAlarms) => [...prevAlarms, newAlarm]); // Update the context
     console.log(newAlarm);
-
     scheduleNotification();
+
+
+  axios.post('http://192.168.1.101:5000/medicinealarmsav',newAlarm)
+  .then((res)=>{
+    console.log(res.data);
     clearForm();
     Alert.alert('Success', 'Medicine details saved and notification scheduled.');
 
+  }).catch((error)=>{
+console.log("error  is : ",error);
+Alert.alert('Error registering the Medicinal details chck your axios code !');
+
+  });
+
+
+   
+    
     const handleDeleteAlarm = (id) => {
       console.log("Delete button clicked for ID:", id);
       setMedicinalForm((prevAlarms) => prevAlarms.filter((alarm) => alarm.id !== id));
     };
   };
 
+  
+  
+
+  
   
 
   const handleDateConfirm = (date) => {
@@ -246,10 +262,14 @@ export default function MedicineForm({ scheduledAlarms, setScheduledAlarms }) {
     setDosage('');
     setPurpose('');
     setNotificationTime(null);
-    setCapturedImage(null);
+   
+    
+    // setCapturedImage(null);
   };
 
   const scheduleNotification = async () => {
+    console.log("notify ho rha h ")
+    console.log( notificationTime)
     try {
       await Notifications.scheduleNotificationAsync({
         content: {
@@ -258,10 +278,17 @@ export default function MedicineForm({ scheduledAlarms, setScheduledAlarms }) {
         },
         trigger: { date: notificationTime },
       });
+      //  Alert.alert('Success', 'Medicine details saved and notification scheduled.');
+   
     } catch (error) {
       console.error('Notification Scheduling Error:', error);
     }
   };
+
+  
+  
+    
+  
 
   return (
     
@@ -276,16 +303,16 @@ export default function MedicineForm({ scheduledAlarms, setScheduledAlarms }) {
     
 
       <View  style={{
-          // elevation: 10,
+         
           backgroundColor: 'white',
           borderRadius: 10,
-          // height: 250,
+          
           width:300,
-          // margin: 10,
+       
           marginTop: 50,
           marginHorizontal:30,
           paddingVertical: 20,
-          // paddingHorizontal: 15,
+          
         }}>
         <Text style={{fontSize:12, color:'#03bafc'}}> Medicine Name:</Text>
 
@@ -310,14 +337,9 @@ export default function MedicineForm({ scheduledAlarms, setScheduledAlarms }) {
           onChangeText={(text) => setPurpose(text)}
         />
 
-    {/* <Button  title="Select Notification  Time" onPress={showDateTimePicker} />
-      {notificationTime ? (
-        <Text style={styles.selectedTime}>
-          Selected Notification Time: {notificationTime.toLocaleString()}
-        </Text>
-      ) : null}
 
-      <Button style={styles.button} title="Save" onPress={handleSaveDetails} disabled={!useOCR && !notificationTime} /> */}
+
+   
 
 <View style={styles.buttonContainer}>
       <Button title="Select Notification Time" onPress={showDateTimePicker} style={styles.button} />
@@ -330,13 +352,13 @@ export default function MedicineForm({ scheduledAlarms, setScheduledAlarms }) {
         style={[styles.button, styles.saveButton]}
         title="Save"
         onPress={handleSaveDetails}
-        disabled={!useOCR && !notificationTime}
+        disabled={ !notificationTime}
       />
     </View>
 
       <DateTimePickerModal
         isVisible={isDateTimePickerVisible}
-        mode="time"
+        mode="datetime"
         onConfirm={handleDateConfirm}
         onCancel={hideDateTimePicker}
       />

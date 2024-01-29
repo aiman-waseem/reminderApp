@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Share, Button } from 'react-native';
+import { Text, View, StyleSheet, Share, Button, Pressable } from 'react-native';
 import * as Location from 'expo-location';
 
 export default function Current_coordinates() {
@@ -53,36 +53,46 @@ export default function Current_coordinates() {
     <View style={styles.container}>
       <Text style={styles.texth}>Longitude: {long}</Text>
       <Text style={styles.texth}>Latitude: {lat}</Text>
-      <View style={styles.butt}>
+      {/* <View style={styles.button}>
           <Button
             title='Send your coordinates'
             onPress={onShare}
             
       />
-      </View>
+      </View> */}
+       <Pressable onPress={onShare} style={styles.button}>
+  <Text style={styles.ButtonText}>Send your coordinates</Text>
+</Pressable>
+
     </View>
   );
 }
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
+      // flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
-      color: "white"
+      color: "white",
+      marginTop:10
     },
     texth:{
       color: 'black',
       fontSize: 20,
     },
-    butt: {
-      backgroundColor: 'crimson',
-      borderRadius: 12,
-      shadowColor: '#171717',
-      shadowOffset: {width: -2, height: 5},
-      shadowOpacity: 0.2,
-      shadowRadius: 3,
-      margin: '10%',
-      padding: '1%'
-     }
+    button: {
+      
+      backgroundColor:  '#03bafc',
+    padding: 10,
+    borderRadius: 15,
+    marginHorizontal:30,
+    padding:'3%',
+     margin: '6%',
+     },
+     ButtonText:{
+      marginHorizontal:26,
+      fontSize:15,
+      fontWeight:'500',
+      color:'white',
+    },
   })

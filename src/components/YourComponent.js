@@ -96,6 +96,7 @@ export default function YourComponent() {
   const [latitude, setLatitude] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('');
   const { setLocation } = useAppContext();
+  const [myId,SetmyId]=useState(0)
   const locations = [
     'MASSCOM CANTEEN',
     'PG CANTEEN',
@@ -176,12 +177,14 @@ export default function YourComponent() {
     if (!description || !longitude || !latitude) {
       return Alert.alert('Please provide all required fields');
     }
+    SetmyId((prevId) => prevId + 1);
     const newLocation = {
       id: new Date().getTime(), // Use a unique ID (timestamp) as the key
       description,
       selectedLocation,
+      myId
     };
-
+console.log(newLocation)
      
     
     setLocation((prevLoc) => [...prevLoc, newLocation]); // Update the context
@@ -190,13 +193,14 @@ export default function YourComponent() {
 
 
     axios
-      .post('http://192.168.43.126:5000/locationsav', {
+      .post('http://192.168.1.101:5000/locationsav', {
         description,
         longitude,
         latitude,
+        myId
       })
       .then((response) => {
-        console.log(response.data);
+        console.log( "This is response.data", response.data);
         Alert.alert('Location registered successfully');
         setDescription('');
         setLongitude('');

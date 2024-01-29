@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button, Alert } from 'react-native';
+import { Text, View, StyleSheet, Button, Alert, Pressable } from 'react-native';
 import * as Location from 'expo-location';
 
 
@@ -49,14 +49,19 @@ export default function CurrentAdress() {
     <View style={styles.container}>
       <Text style={styles.texth}>Find out your address</Text>
       <Text style={styles.texth}>(It may take a little time)</Text>
-      <View style={styles.butt}>
+      {/* <View style={styles.butt}>
         <Button
           title="Show address"
           onPress={GetLocation}
           color=""
           style={styles.texth}
          />
-      </View>
+      </View> */}
+
+<Pressable onPress={GetLocation} style={styles.button}>
+  <Text style={styles.ButtonText}>Show address</Text>
+</Pressable>
+
     </View>
   );
 }
@@ -64,23 +69,30 @@ export default function CurrentAdress() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     justifyContent: "center",
-    color: "white"
+    color: "white",
+    marginTop:60
   },
   texth:{
     color: 'black',
     fontSize: 20,
     textAlign: "center",
   },
-  butt: {
-    backgroundColor: 'crimson',
-    borderRadius: 12,
-    shadowColor: '#171717',
-    shadowOffset: {width: 2, height: 7},
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    margin: '15%',
-    padding: '1%'
-   }
+ 
+   button: {
+      
+    backgroundColor:  '#03bafc',
+  padding: 10,
+  borderRadius: 15,
+  marginHorizontal:35,
+  // padding:'3%',
+    margin: '6%',
+   },
+   ButtonText:{
+    marginHorizontal:50,
+    fontSize:15.5,
+    fontWeight:'500',
+    color:'white',
+  },
 })

@@ -47,22 +47,64 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useAppContext } from './AppContext';
-
+// import { ObjectId } from 'mongodb';
+import axios from 'axios';
 const SavedAlarm = () => {
   const { locationData, medicinalFormData, setLocation, setMedicinalForm } = useAppContext();
 
   console.log("Location Data using context:", locationData);
   console.log("Medicine data using context", medicinalFormData);
 
-  const handleDeleteMedicinalAlarm = (id) => {
+
+  const handleDeleteMedicinalAlarm =async (id) => {
     console.log("Delete button clicked for Medicinal Alarm ID:", id);
-    setMedicinalForm((prevAlarms) => prevAlarms.filter((alarm) => alarm.id !== id));
+    try {
+      // Make a DELETE request to the backend endpoint with the specific ID
+      const response = await axios.delete(`http://192.168.1.101:5000/medicinealarmsav/${id}`);
+  
+      if (response.status === 200) {
+        console.log('Medicinal Alarm deleted successfully');
+        // Assuming you have a state variable named setMedicinalForm to update the UI
+        setMedicinalForm((prevAlarms) => prevAlarms.filter((alarm) => alarm.myid !== id));
+      } else {
+        console.error('Failed to delete this Medicinal Alarm');
+      }
+    } catch (error) {
+      console.error('Error deleting this Medicinal Alarm:', error);
+    }
+    // setMedicinalForm((prevAlarms) => prevAlarms.filter((alarm) => alarm.id !== id));
   };
 
-  const handleDeleteLocationAlarm = (id) => {
+  const handleDeleteLocationAlarm = async(id) => {
     console.log("Delete button clicked for Location Alarm ID:", id);
-    setLocation((prevAlarms) => prevAlarms.filter((alarm) => alarm.id !== id));
+    try {
+      // Make a DELETE request to the backend endpoint with the specific ID
+      const response = await axios.delete(`http://192.168.1.101:5000/locationsav/${id}`);
+  
+      if (response.status === 200) {
+        console.log('location Alarm deleted successfully');
+        setLocation((prevAlarms) => prevAlarms.filter((alarm) => alarm.myId !== id));
+ 
+      } else {
+        console.error('Failed to delete this location id  Alarm');
+      }
+    } catch (error) {
+      console.error('Error deleting this location Alarm:', error);
+    }
+    // setLocation((prevAlarms) => prevAlarms.filter((alarm) => alarm.id !== id));
   };
+
+
+
+  // const handleDeleteMedicinalAlarm = (id) => {
+  //   console.log("Delete button clicked for Medicinal Alarm ID:", id);
+  //   setMedicinalForm((prevAlarms) => prevAlarms.filter((alarm) => alarm.id !== id));
+  // };
+
+  // const handleDeleteLocationAlarm = (id) => {
+  //   console.log("Delete button clicked for Location Alarm ID:", id);
+  //   setLocation((prevAlarms) => prevAlarms.filter((alarm) => alarm.id !== id));
+  // };
 
   return (
     <View style={styles.container}>
@@ -78,8 +120,11 @@ const SavedAlarm = () => {
                   <View style={[styles.alarmItem, styles.medicinalItem]}>
                     <Text>{`Medicine: ${item.medicineName}`}</Text>
                     <Text>{`Notification Time: ${item.notificationTime.toLocaleString()}`}</Text>
+                    {/* <Text>{`Notification id: ${item._id}`}</Text> */}
+
+                   
                     {/* Add a delete button with TouchableOpacity */}
-                    <TouchableOpacity onPress={() => handleDeleteMedicinalAlarm(item.id)}>
+                    <TouchableOpacity onPress={() => handleDeleteMedicinalAlarm(item.myid)}>
                       <Text style={styles.deleteButton}>Delete</Text>
                     </TouchableOpacity>
                   </View>
@@ -99,7 +144,7 @@ const SavedAlarm = () => {
                     <Text>{item.description}</Text>
                     <Text>{item.selectedLocation}</Text>
                     {/* Add a delete button with TouchableOpacity */}
-                    <TouchableOpacity onPress={() => handleDeleteLocationAlarm(item.id)}>
+                    <TouchableOpacity onPress={() => handleDeleteLocationAlarm(item.myId)}>
                       <Text style={styles.deleteButton}>Delete</Text>
                     </TouchableOpacity>
                   </View>
